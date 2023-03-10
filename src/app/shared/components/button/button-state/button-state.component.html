@@ -1,0 +1,27 @@
+<!-- start: Botón desactivado -->
+<button pButton pRipple type="button" [label]="titleOff || ''" *ngIf=" (buttonType$ | async) === 'off' " disabled="true"></button>
+<!-- end: Botón desactivado -->
+
+<!-- start: Botón activado -->
+<button pButton pRipple type="button" [label]="titleOn" *ngIf=" (buttonType$ | async) === 'on' " [ngClass]="classButton"></button>
+<!-- end: Botón activado -->
+
+<!-- start:  Botón Guardando -->
+<button pButton pRipple type="button" [label]="titleSaving" icon="pi pi-spin pi-spinner"
+	*ngIf=" (buttonType$ | async) === 'saveTime' || (buttonType$ | async) === 'saveNoTime' " [ngClass]="classButton"></button>
+<!-- end:  Botón Guardando -->
+
+<!-- start: Botón Guadar ok -->
+<button pButton pRipple type="button" [label]="titleSave" *ngIf=" (buttonType$ | async) === 'save' " class="p-button-success"
+	[ngClass]="classButton"></button>
+<!-- end: Botón Guadar ok -->
+
+<!-- start: Botón Error campos -->
+<button pButton pRipple type="button" [label]="titleError" *ngIf=" (buttonType$ | async) === 'error' " class="p-button-danger"
+	[ngClass]="classButton"></button>
+<!-- end: Botón Error campos -->
+
+<!-- start: Botón Error guardar -->
+<button pButton pRipple type="button" [label]="titleErrorSave" *ngIf=" (buttonType$ | async) === 'errorSave' " class="p-button-danger"
+	[ngClass]="classButton"></button>
+<!-- end: Botón Error guardar -->

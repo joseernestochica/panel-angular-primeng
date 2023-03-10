@@ -1,0 +1,19 @@
+<ng-container *ngIf="user$ | async as user">
+	<div class="text-center">
+		<h4 class="mb-3">Hola {{ user.name }}</h4>
+		<div class="mb-3">
+			<img src="https://primefaces.org/cdn/primeng/images/demo/organization/walter.jpg" [alt]="" class="shadow-4" width="50%" />
+		</div>
+		<div>
+			<h6 class="mt-0 mb-1">Role: {{ user.roles?.join(',') }}</h6>
+			<span class="ml-1">{{ user.email }}</span>
+
+			<div class="mt-5">
+				<button pButton pRipple icon="pi pi-user-edit" class="mr-2 p-button-rounded p-button-primary" label="Editar perfil" (click)="onEditInsertElement(user)"></button>
+			</div>
+			<div class="mt-3">
+				<button pButton pRipple icon="pi pi-sign-out" class="mr-2 p-button-rounded p-button-danger" label="Desconectar" (click)="logout()"></button>
+			</div>
+		</div>
+	</div>
+</ng-container>

@@ -1,0 +1,175 @@
+<ng-container *ngIf="!userIdRoute">
+	<ng-container [ngTemplateOutlet]="formUser"></ng-container>
+</ng-container>
+
+<ng-container *ngIf="userIdRoute">
+
+	<div class="grid">
+		<div class="col-12">
+			<div class="card">
+				<h5>Editar Perfil</h5>
+				<ng-container [ngTemplateOutlet]="formUser"></ng-container>
+			</div>
+		</div>
+	</div>
+
+</ng-container>
+
+<ng-template #formUser>
+	<p-divider styleClass="mb-6"></p-divider>
+	<form class="form" [formGroup]="formGroup" *ngIf="formGroup && !loading">
+
+		<div class="p-fluid formgrid grid">
+
+			<!-- Nombre -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="name" class="block">Nombre</label>
+				<input pInputText id="name" type="text" placeholder="Nombre" formControlName="name" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'name', 'required')">Inserta el nombre</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'name', 'minlength')">Inserta el nombre</small>
+			</div>
+
+			<!-- Apellidos -->
+			<div class="field col-12 md:col-4">
+				<label htmlFor="surnames" class="block">Apellidos</label>
+				<input pInputText id="surnames" type="text" placeholder="Apellidos" formControlName="surnames" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'surnames', 'required')">Inserta los apellidos</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'surnames', 'minlength')">Inserta los apellidos</small>
+			</div>
+
+			<!-- Email -->
+			<div class="field col-12 md:col-3">
+				<label htmlFor="email" class="block">Correo electrónico</label>
+				<input pInputText id="email" type="text" placeholder="Email" formControlName="email" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'email', 'required')">Introduce el email</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'email', 'pattern')">Inserta un email correcto</small>
+			</div>
+
+			<!-- Password -->
+			<div class="field col-12 md:col-3">
+				<label htmlFor="password" class="block">Contraseña</label>
+				<p-password formControlName="password" id="password" [toggleMask]="true" class="w-full" styleClass="p-password p-component p-inputwrapper p-input-icon-right" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'required')">Introduce la contraseña</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'minlength')">Mínimo de caracteres: 6</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'maxlength')">Máximo de caracteres: 20</small>
+			</div>
+
+			<!-- Roles -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="roles" class="block">Roles</label>
+				<p-multiSelect [options]="['ADMIN', 'AUTHOR']" defaultLabel="Selecciona los roles"
+					[showHeader]="false" formControlName="roles"></p-multiSelect>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'roles', 'required')">Selecciona el role</small>
+			</div>
+
+			<!-- NIF -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="nif" class="block">NIF</label>
+				<input pInputText id="nif" type="text" placeholder="NIF" formControlName="nif" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'nif', 'required')">Inserta el NIF</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'nif', 'minlength')">Mínimo de caracteres: 9</small>
+			</div>
+
+			<!-- Teléfono -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="phone" class="block">Teléfono</label>
+				<input pInputText id="phone" type="text" placeholder="Teléfono" formControlName="phone" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'phone', 'required')">Introduce el teléfono</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'phone', 'minlength')">Mínimo de caracteres: 9</small>
+			</div>
+
+			<!-- Sexo -->
+			<div class="field col-12 md:col-3 text-center">
+				<label htmlFor="password" class="block">Sexo</label>
+				<p-selectButton [options]="[{label: 'Mujer', value: 'female'}, {label: 'Hombre', value: 'male'}]"
+					formControlName="sex" optionLabel="label" optionValue="value"></p-selectButton>
+			</div>
+
+			<!-- Fecha de nacimiento -->
+			<div class="field col-12 md:col-3">
+				<label htmlFor="birthDate" class="block">Fecha de nacimiento</label>
+				<p-calendar inputId="basic" formControlName="birthDate" class="w-full"
+					[touchUI]="true" [readonlyInput]="true" placeholder="Fecha de nacimiento"></p-calendar>
+			</div>
+
+			<!-- Dirección -->
+			<div class="field col-12 md:col-6">
+				<label htmlFor="name" class="block">Dirección</label>
+				<input pInputText id="address" type="text" placeholder="Dirección" formControlName="address" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'address', 'required')">Inserta la dirección</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'address', 'minlength')">Inserta la dirección</small>
+			</div>
+
+			<!-- País -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="name" class="block">País</label>
+				<p-dropdown [options]="countries" formControlName="country" placeholder="Selecciona el país"
+					optionLabel="name" optionValue="isoCode" [showClear]="true" [filter]="true" filterBy="name"
+					appendTo="body" (onChange)="setStates( $event.value, true )"></p-dropdown>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'country', 'required')">Selecciona el país</small>
+			</div>
+
+			<!-- Provincia -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="name" class="block">Provincia</label>
+				<p-dropdown [options]="states" formControlName="state" placeholder="Selecciona la provincia"
+					optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name"
+					appendTo="body" (onChange)="setCities($event.value, true)"></p-dropdown>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'state', 'required')">Selecciona la provincia</small>
+			</div>
+
+			<!-- Ciudad -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="name" class="block">Ciudad</label>
+				<p-dropdown [options]="cities" formControlName="city" placeholder="Selecciona la ciudad"
+					optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" appendTo="body"></p-dropdown>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'city', 'required')">Selecciona la ciudad</small>
+			</div>
+
+			<!-- Código postal -->
+			<div class="field col-12 md:col-3">
+				<label htmlFor="name" class="block">Código postal</label>
+				<input pInputText id="postalCode" type="text" placeholder="Código postal" formControlName="postalCode" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'postalCode', 'required')">Inserta el Código postal</small>
+			</div>
+
+			<!-- Avatar -->
+			<div class="field col-3 md:col-1 text-center mr-0 pr-0">
+				<label htmlFor="file" class="block">&nbsp;</label>
+				<p-avatar [image]="img" styleClass="m-0" size="large" shape="circle"></p-avatar>
+			</div>
+
+			<!-- Imagen -->
+			<div class="field col-7 md:col-4 text-center ml-0 mr-0 pl-0 pr-0">
+				<label htmlFor="file" class="block">Avatar</label>
+				<input type="file" pInputText name="profile_avatar" accept=".png, .jpg, .jpeg" styleClass="m-0"
+					(change)="insertPic( $event )" class="p-button-rounded" />
+			</div>
+
+			<!-- Boton borrar imagen -->
+			<div class="field col-1 md:col-1 text-center ml-0 pl-0 mr-0 pr-0">
+				<label htmlFor="file" class="block">&nbsp;</label>
+				<button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" (click)="deletePic()"></button>
+			</div>
+
+			<!-- Activo -->
+			<div class="field col-12 md:col-3 text-center">
+				<label htmlFor="password" class="block">Activo</label>
+				<p-selectButton [options]="[{label: 'Off', value: false}, {label: 'On', value: true}]"
+					formControlName="isActive" optionLabel="label" optionValue="value"></p-selectButton>
+			</div>
+
+		</div>
+
+		<p-divider styleClass="mb-6 mt-4"></p-divider>
+
+		<div class="text-center">
+			<app-button-state classButton="mb-3" (click)="save()"></app-button-state>
+		</div>
+
+		<div class="text-center">
+			<p-message severity="error" text="Correo electrónico inválido. Ya existe otro usuario con este correo electrónico" styleClass="w-full" *ngIf="isErrorEmailDuplicate"></p-message>
+		</div>
+
+	</form>
+</ng-template>
