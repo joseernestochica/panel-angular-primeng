@@ -5,5 +5,9 @@ export const environment = {
   domain: '',
   url: '',
   title: 'Angular - Prime NG',
-  apiUrl: 'http://localhost:3000'
+  apiUrl: 'http://localhost:5001'
+};
+
+export const imgagesDefault = {
+  profile: 'assets/layout/images/no-profile.png',
 };

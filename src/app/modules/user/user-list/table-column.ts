@@ -3,6 +3,13 @@ import { TableColumnModel } from 'shared/components/table/models/table-column.mo
 
 export const tableColumns: TableColumnModel[] = [
 	{
+		field: 'img',
+		title: 'Avatar',
+		active: true,
+		styleClass: 'flex justify-content-between align-items-center',
+		hasSort: false,
+	},
+	{
 		field: 'name',
 		title: 'Nombre',
 		active: true,
@@ -56,14 +63,14 @@ export const tableColumns: TableColumnModel[] = [
 		hasSort: true
 	},
 	{
-		field: 'createdAt',
+		field: 'created_at',
 		title: 'Alta',
 		active: false,
 		styleClass: 'flex justify-content-between align-items-center',
 		hasSort: true
 	},
 	{
-		field: 'postalCode',
+		field: 'postal_code',
 		title: 'Código postal',
 		active: false,
 		styleClass: 'flex justify-content-between align-items-center',
@@ -77,7 +84,7 @@ export const tableColumns: TableColumnModel[] = [
 		hasSort: true,
 	},
 	{
-		field: 'isActive',
+		field: 'active',
 		title: 'Activo',
 		active: false,
 		styleClass: 'flex justify-content-between align-items-center',

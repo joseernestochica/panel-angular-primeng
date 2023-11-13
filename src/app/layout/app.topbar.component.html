@@ -12,10 +12,7 @@
     </button>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button class="p-link layout-topbar-button" (click)="displaySidebarProfile = true">
-            <i class="pi pi-user"></i>
-            <span>Perfil</span>
-        </button>
+        <p-avatar [image]="imgProfile" size="large" shape="circle" (click)="displaySidebarProfile = true" styleClass="cursor-pointer"></p-avatar>
     </div>
 </div>
 

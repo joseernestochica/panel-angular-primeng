@@ -50,9 +50,14 @@
 				<label htmlFor="password" class="block">Contraseña</label>
 				<p-password formControlName="password" id="password" [toggleMask]="true" class="w-full" styleClass="p-password p-component p-inputwrapper p-input-icon-right" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
 				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'required')">Introduce la contraseña</small>
-				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'minlength')">Mínimo de caracteres: 6</small>
-				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'maxlength')">Máximo de caracteres: 20</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'minlength')">Mínimo de caracteres: 8</small>
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'password', 'pattern')">Al menos: 1 caracter MAYÚSCULA, 1 caracter en minúscula, 1 número</small>
 			</div>
+
+		</div>
+
+
+		<div class="p-fluid formgrid grid">
 
 			<!-- Roles -->
 			<div class="field col-12 md:col-2">
@@ -78,26 +83,24 @@
 				<small class="p-error block" *ngIf="formCheck.get('hasError', 'phone', 'minlength')">Mínimo de caracteres: 9</small>
 			</div>
 
-			<!-- Sexo -->
-			<div class="field col-12 md:col-3 text-center">
-				<label htmlFor="password" class="block">Sexo</label>
-				<p-selectButton [options]="[{label: 'Mujer', value: 'female'}, {label: 'Hombre', value: 'male'}]"
-					formControlName="sex" optionLabel="label" optionValue="value"></p-selectButton>
-			</div>
-
-			<!-- Fecha de nacimiento -->
-			<div class="field col-12 md:col-3">
-				<label htmlFor="birthDate" class="block">Fecha de nacimiento</label>
-				<p-calendar inputId="basic" formControlName="birthDate" class="w-full"
-					[touchUI]="true" [readonlyInput]="true" placeholder="Fecha de nacimiento"></p-calendar>
-			</div>
-
 			<!-- Dirección -->
 			<div class="field col-12 md:col-6">
 				<label htmlFor="name" class="block">Dirección</label>
 				<input pInputText id="address" type="text" placeholder="Dirección" formControlName="address" class="w-full" />
 				<small class="p-error block" *ngIf="formCheck.get('hasError', 'address', 'required')">Inserta la dirección</small>
 				<small class="p-error block" *ngIf="formCheck.get('hasError', 'address', 'minlength')">Inserta la dirección</small>
+			</div>
+
+		</div>
+
+
+		<div class="p-fluid formgrid grid">
+
+			<!-- Código postal -->
+			<div class="field col-12 md:col-2">
+				<label htmlFor="name" class="block">Código postal</label>
+				<input pInputText id="postal_code" type="text" placeholder="Código postal" formControlName="postal_code" class="w-full" />
+				<small class="p-error block" *ngIf="formCheck.get('hasError', 'postalCode', 'required')">Inserta el Código postal</small>
 			</div>
 
 			<!-- País -->
@@ -110,7 +113,7 @@
 			</div>
 
 			<!-- Provincia -->
-			<div class="field col-12 md:col-2">
+			<div class="field col-12 md:col-3">
 				<label htmlFor="name" class="block">Provincia</label>
 				<p-dropdown [options]="states" formControlName="state" placeholder="Selecciona la provincia"
 					optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name"
@@ -119,44 +122,18 @@
 			</div>
 
 			<!-- Ciudad -->
-			<div class="field col-12 md:col-2">
+			<div class="field col-12 md:col-3">
 				<label htmlFor="name" class="block">Ciudad</label>
 				<p-dropdown [options]="cities" formControlName="city" placeholder="Selecciona la ciudad"
 					optionLabel="name" optionValue="id" [showClear]="true" [filter]="true" filterBy="name" appendTo="body"></p-dropdown>
 				<small class="p-error block" *ngIf="formCheck.get('hasError', 'city', 'required')">Selecciona la ciudad</small>
 			</div>
 
-			<!-- Código postal -->
-			<div class="field col-12 md:col-3">
-				<label htmlFor="name" class="block">Código postal</label>
-				<input pInputText id="postalCode" type="text" placeholder="Código postal" formControlName="postalCode" class="w-full" />
-				<small class="p-error block" *ngIf="formCheck.get('hasError', 'postalCode', 'required')">Inserta el Código postal</small>
-			</div>
-
-			<!-- Avatar -->
-			<div class="field col-3 md:col-1 text-center mr-0 pr-0">
-				<label htmlFor="file" class="block">&nbsp;</label>
-				<p-avatar [image]="img" styleClass="m-0" size="large" shape="circle"></p-avatar>
-			</div>
-
-			<!-- Imagen -->
-			<div class="field col-7 md:col-4 text-center ml-0 mr-0 pl-0 pr-0">
-				<label htmlFor="file" class="block">Avatar</label>
-				<input type="file" pInputText name="profile_avatar" accept=".png, .jpg, .jpeg" styleClass="m-0"
-					(change)="insertPic( $event )" class="p-button-rounded" />
-			</div>
-
-			<!-- Boton borrar imagen -->
-			<div class="field col-1 md:col-1 text-center ml-0 pl-0 mr-0 pr-0">
-				<label htmlFor="file" class="block">&nbsp;</label>
-				<button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" (click)="deletePic()"></button>
-			</div>
-
 			<!-- Activo -->
-			<div class="field col-12 md:col-3 text-center">
+			<div class="field col-12 md:col-2 text-center">
 				<label htmlFor="password" class="block">Activo</label>
 				<p-selectButton [options]="[{label: 'Off', value: false}, {label: 'On', value: true}]"
-					formControlName="isActive" optionLabel="label" optionValue="value"></p-selectButton>
+					formControlName="active" optionLabel="label" optionValue="value"></p-selectButton>
 			</div>
 
 		</div>

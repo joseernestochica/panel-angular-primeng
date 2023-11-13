@@ -22,10 +22,10 @@ export class LocationService {
 
     return new Promise( response => {
 
-      const url = `${ this.urlApi }/location/countries?lang=${ params.lang || 'es' }`;
+      const url = `${ this.urlApi }/countries?lang=${ params.lang || 'es' }`;
 
       const sb = this.http.get<ResponseLocation>( url ).pipe(
-        map( res => res.data?.countries ),
+        map( res => res.countries ),
         catchError( err => of( undefined ) )
       ).subscribe( countries => {
         if ( countries && countries.length > 0 ) { response( countries ) }
@@ -42,10 +42,10 @@ export class LocationService {
 
     return new Promise( response => {
 
-      const url = `${ this.urlApi }/location/states?country_iso=${ params.country_iso || 'es' }`;
+      const url = `${ this.urlApi }/states?country_iso=${ params.country_iso || 'es' }`;
 
       const sb = this.http.get<ResponseLocation>( url ).pipe(
-        map( res => res.data?.states ),
+        map( res => res.states ),
         catchError( err => of( undefined ) )
       ).subscribe( states => {
         if ( states && states.length > 0 ) { response( states ); }
@@ -61,10 +61,10 @@ export class LocationService {
 
     return new Promise( response => {
 
-      const url = `${ this.urlApi }/location/cities?country_iso=${ params.country_iso || 'es' }&state_id=${ params.state_id || 23 }`;
+      const url = `${ this.urlApi }/cities?country_iso=${ params.country_iso || 'es' }&state_id=${ params.state_id || 23 }`;
 
       const sb = this.http.get<ResponseLocation>( url ).pipe(
-        map( res => res.data?.cities ),
+        map( res => res.cities ),
         catchError( err => of( undefined ) )
       ).subscribe( cities => {
         if ( cities && cities.length > 0 ) { response( cities ) }
@@ -80,10 +80,10 @@ export class LocationService {
 
     return new Promise( response => {
 
-      const url = `${ this.urlApi }/location/country?country_iso=${ params.country_iso || 'es' }`;
+      const url = `${ this.urlApi }/country?country_iso=${ params.country_iso || 'es' }`;
 
       const sb = this.http.get<ResponseLocation>( url ).pipe(
-        map( res => res.data?.country ),
+        map( res => res.country ),
         catchError( err => of( undefined ) )
       ).subscribe( country => response( country ) );
       this.subscriptions.push( sb );
@@ -96,10 +96,10 @@ export class LocationService {
 
     return new Promise( response => {
 
-      const url = `${ this.urlApi }/location/state?country_iso=${ params.country_iso || 'es' }&state_id=${ params.state_id || '23' }`;
+      const url = `${ this.urlApi }/state?country_iso=${ params.country_iso || 'es' }&state_id=${ params.state_id || '23' }`;
 
       const sb = this.http.get<ResponseLocation>( url ).pipe(
-        map( res => res.data?.state ),
+        map( res => res.state ),
         catchError( err => of( undefined ) )
       ).subscribe( state => response( state ) );
       this.subscriptions.push( sb );
@@ -113,10 +113,10 @@ export class LocationService {
 
     return new Promise( response => {
 
-      const url = `${ this.urlApi }/location/city?country_iso=${ params.country_iso || 'es' }&state_id=${ params.state_id || '23' }&city_id=${ params.city_id || 'jaen' }`;
+      const url = `${ this.urlApi }/city?country_iso=${ params.country_iso || 'es' }&state_id=${ params.state_id || '23' }&city_id=${ params.city_id || 'jaen' }`;
 
       const sb = this.http.get<ResponseLocation>( url ).pipe(
-        map( res => res.data?.city ),
+        map( res => res.city ),
         catchError( err => of( undefined ) )
       ).subscribe( city => response( city ) );
       this.subscriptions.push( sb );

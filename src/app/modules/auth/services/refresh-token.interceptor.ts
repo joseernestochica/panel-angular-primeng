@@ -22,20 +22,15 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 
 		if ( authService.getAuthFromLocalStorage() ) {
 			const authData = authService.getAuthFromLocalStorage();
-			request = this.addToken( request, authData?.accessToken || '' );
+			request = this.addToken( request, authData?.token || '' );
 		}
 
 		return next.handle( request ).pipe(
 			catchError( ( error: any ) => {
-				if ( error instanceof HttpErrorResponse && error.status === 401 ) {
 
-					// Error en el login
-					const errorMessage: string | undefined = error.error?.message;
-					if ( errorMessage === 'login incorrect' ) {
-						authService.errorLogin$.next( true );
-						authService.logout();
-						return of( error );
-					}
+				const errorMessage: string | undefined = error.error?.message;
+
+				if ( error instanceof HttpErrorResponse && error.status === 401 ) {
 
 					// Refrescar el token
 					console.info( 'Refresh token' );
@@ -43,10 +38,15 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 
 				} else {
 
+					if ( error.status === 406 ) { // Error en el login o refresh token
+						authService.errorLogin$.next( true );
+						authService.logout( true );
+						return of( error );
+					}
+
 					console.warn( 'Error en petición http' );
 					console.warn( 'Crear un servicio para guardar los errores en DB' );
 					console.warn( error );
-					throw error;
 					return of( error );
 
 				}
@@ -84,8 +84,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 					switchMap( newAuth => {
 
 						this.isRefreshing = false;
-						this.refreshTokenSubject.next( newAuth?.accessToken );
-						return next.handle( this.addToken( request, newAuth?.accessToken || '' ) );
+						this.refreshTokenSubject.next( newAuth?.token );
+						return next.handle( this.addToken( request, newAuth?.token || '' ) );
 
 					} ),
 					catchError( err => {

@@ -1,11 +1,18 @@
 <ng-container *ngIf="user$ | async as user">
 	<div class="text-center">
 		<h4 class="mb-3">Hola {{ user.name }}</h4>
+
+		<!-- ============================================================== -->
+		<!-- AVATAR PROFILE -->
+		<!-- ============================================================== -->
 		<div class="mb-3">
-			<img src="https://primefaces.org/cdn/primeng/images/demo/organization/walter.jpg" [alt]="" class="shadow-4" width="50%" />
+			<input type="file" style="display: none;" (change)="onFileSelected($event)" #fileUpload>
+			<p-avatar [image]="imgProfile" size="xlarge" shape="circle" (click)="fileUpload.click()" styleClass="cursor-pointer"></p-avatar>
 		</div>
+
+
 		<div>
-			<h6 class="mt-0 mb-1">Role: {{ user.roles?.join(',') }}</h6>
+			<h6 class="mt-0 mb-1" *ngIf="user.roles">Role: {{ user.roles.join(',') }}</h6>
 			<span class="ml-1">{{ user.email }}</span>
 
 			<div class="mt-5">

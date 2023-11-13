@@ -53,7 +53,7 @@
 
 						<!-- Columnas de la tabla -->
 						<ng-container *ngFor="let column of columns">
-							<th style="min-width: 12rem" [pSortableColumn]="column.field" *ngIf="column.active">
+							<th style="min-width: 1rem" [pSortableColumn]="column.field" *ngIf="column.active">
 								<div [class]="column.styleClass">
 									{{ column.title }}
 									<ng-container *ngIf="column.filter">
@@ -90,7 +90,9 @@
 						<!-- Filas de los elementos de la tabla -->
 						<ng-container *ngFor="let column of columns">
 							<ng-container *ngIf="column.active" [ngSwitch]="column.field">
-								<ng-container *ngSwitchCase="'isActive'">
+
+								<!-- column active -->
+								<ng-container *ngSwitchCase="'active'">
 									<td class="text-center">
 										<i class="pi true-icon"
 											[ngClass]="{'pi-check-circle': user[ column.field], 'pi-times-circle': !user[ column.field]}"
@@ -98,8 +100,15 @@
 									</td>
 								</ng-container>
 
+								<!-- column img -->
+								<ng-container *ngSwitchCase="'img'">
+									<td class="text-center">
+										<p-avatar [image]="user[ column.field]" size="normal" shape="circle"></p-avatar>
+									</td>
+								</ng-container>
+
 								<ng-container *ngSwitchDefault>
-									<td>{{ user[ column.field] }}</td>
+									<td style="white-space: nowrap;">{{ user[ column.field] }}</td>
 								</ng-container>
 
 							</ng-container>

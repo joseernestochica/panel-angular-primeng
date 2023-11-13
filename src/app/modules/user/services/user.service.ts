@@ -7,8 +7,6 @@ import { HelpersService } from 'shared/services/helpers.service';
 import { UserModel } from 'auth/models/user.model';
 import { UserResponse } from '../interfaces/user-response.interface';
 import { GetParams } from 'shared/interfaces/get-params.interface';
-import { ReponseErrorApi } from 'shared/interfaces/response.interface';
-
 
 @Injectable( {
   providedIn: 'root'
@@ -24,13 +22,13 @@ export class UserService {
 
   getMany ( getParams: GetParams<UserModel> ): Observable<UserResponse | undefined> {
 
-    if ( !getParams.sort_c ) {
-      getParams.sort_c = 'createdAt';
-      getParams.sort_d = 'DESC';
+    if ( !getParams.sortc ) {
+      getParams.sortc = 'created_at';
+      getParams.sortd = 'DESC';
     }
 
     const urlParams = this.helpers.buildUrlGetParams( getParams );
-    const url = `${ this.urlApi }/user${ urlParams }`;
+    const url = `${ this.urlApi }/users${ urlParams }`;
 
     return this.http.get<UserResponse>( url ).pipe(
       tap( res => res ),
@@ -44,29 +42,29 @@ export class UserService {
     const url = `${ this.urlApi }/user/${ getParams.id }`;
 
     return this.http.get<UserResponse>( url ).pipe(
-      map( res => res.data as UserModel ),
+      map( res => res.user ),
       catchError( error => of( undefined ) )
     );
 
   }
 
-  createOne ( getParams: GetParams<UserModel> ): Observable<UserModel | ReponseErrorApi> {
+  createOne ( getParams: GetParams<UserModel> ): Observable<UserResponse | undefined> {
 
     const url = `${ this.urlApi }/user`;
 
     return this.http.post<UserResponse>( url, getParams.body ).pipe(
-      map( res => res.data as UserModel ),
+      tap( res => res ),
       catchError( error => of( error.error ) )
     );
 
   }
 
-  editOne ( getParams: GetParams<UserModel> ): Observable<UserModel | ReponseErrorApi> {
+  editOne ( getParams: GetParams<UserModel> ): Observable<UserResponse | undefined> {
 
     const url = `${ this.urlApi }/user/${ getParams.id }`;
 
     return this.http.put<UserResponse>( url, getParams.body ).pipe(
-      map( res => res.data as UserModel ),
+      tap( res => res ),
       catchError( error => of( error.error ) )
     );
 

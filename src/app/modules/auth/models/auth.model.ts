@@ -4,7 +4,7 @@ export class AuthModel {
 
 	constructor (
 
-		public accessToken?: string,
+		public token?: string,
 		public refreshToken?: string,
 		public user?: UserModel
 

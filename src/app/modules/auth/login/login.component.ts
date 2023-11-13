@@ -61,9 +61,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group( {
             email: [
-                'info@urbecom.com', Validators.compose( [ Validators.required, Validators.email, Validators.minLength( 3 ), Validators.maxLength( 320 ), ] ), ],
+                'joseernestochica@gmail.com', Validators.compose( [ Validators.required, Validators.email, Validators.minLength( 3 ), Validators.maxLength( 320 ), ] ), ],
             password: [
-                '12345678', Validators.compose( [ Validators.required, Validators.minLength( 3 ), Validators.maxLength( 100 ), ] ), ],
+                '123456', Validators.compose( [ Validators.required, Validators.minLength( 3 ), Validators.maxLength( 100 ), ] ), ],
         } );
 
         this.formCheck.formGroup = this.formGroup;
@@ -79,7 +79,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         const sb = this.authService.login( this.formGroup.value.email, this.formGroup.value.password ).subscribe( user => {
             if ( !user ) {
-                console.log( 'error' );
                 this.authService.errorLogin$.next( true );
                 return;
             }

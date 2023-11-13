@@ -6,10 +6,13 @@ import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ImageService } from 'shared/services/image.service';
 import { LoadingService } from 'app/layout/service/loading.service';
 import { tableColumns } from './table-column'
 import { UserService } from '../services/user.service';
 
+import { imgagesDefault } from 'environments/environment';
+import { GetParamsQueryParams } from 'shared/interfaces';
 import { TableColumnModel } from 'shared/components/table/models/table-column.model';
 import { UserEditComponent } from '../user-edit/user-edit.component';
 import { UserModel } from 'auth/models/user.model';
@@ -38,6 +41,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private dialogService: DialogService,
     private datePipe: DatePipe,
+    private imageService: ImageService,
     private userService: UserService,
     public loading: LoadingService,
   ) {
@@ -53,15 +57,41 @@ export class UserListComponent implements OnInit, OnDestroy {
   private setColumns () {
 
     this.columns = tableColumns;
-    this.selectecColumns.push( this.columns[ 0 ], this.columns[ 1 ], this.columns[ 2 ], this.columns[ 3 ], this.columns[ 4 ] );
+    for ( const column of this.columns ) {
+      if ( column.active ) { this.selectecColumns.push( column ); }
+    }
 
   }
 
   private formatElements () {
 
     this.users.map( user => {
-      user.createdAt = this.datePipe.transform( user.createdAt, 'medium' ) || '';
+      user.created_at = this.datePipe.transform( user.created_at, 'medium' ) || '';
+      user.img = user.img && user.img !== ''
+        ? this.imageService.getImage( { name: user.img, type: 'imageUser', id: `${ user.id }` } )
+        : imgagesDefault.profile;
     } );
+
+  }
+
+  private setQueryParams ( filters: any ): GetParamsQueryParams[] {
+
+    const queryParams: GetParamsQueryParams[] = [];
+
+    if ( filters.name && filters.name[ 0 ] && filters.name[ 0 ].value ) {
+      queryParams.push( { name: 'name', value: filters.name[ 0 ].value } );
+    }
+    if ( filters.surnames && filters.surnames[ 0 ] && filters.surnames[ 0 ].value ) {
+      queryParams.push( { name: 'surnames', value: filters.surnames[ 0 ].value } );
+    }
+    if ( filters.email && filters.email[ 0 ] && filters.email[ 0 ].value ) {
+      queryParams.push( { name: 'email', value: filters.email[ 0 ].value } );
+    }
+    if ( filters.isActive && filters.isActive[ 0 ] && filters.isActive[ 0 ].value ) {
+      queryParams.push( { name: 'active', value: filters.email[ 0 ].value === true ? '1' : '0' } );
+    }
+
+    return queryParams;
 
   }
 
@@ -93,20 +123,16 @@ export class UserListComponent implements OnInit, OnDestroy {
     const sb = this.userService.getMany( {
       limit: this.event?.rows,
       page: ( ( this.event?.first || 0 ) + ( this.event?.rows || 10 ) ) / ( this.event?.rows || 10 ),
-      sort_c: this.event?.sortField,
-      sort_d: this.event?.sortOrder === 1 ? 'ASC' : 'DESC',
+      sortc: this.event?.sortField,
+      sortd: this.event?.sortOrder === 1 ? 'ASC' : 'DESC',
       search: this.event?.globalFilter && this.event.globalFilter !== '' ? this.event.globalFilter : '',
-      searchSingle1: filters.name && filters.name[ 0 ] && filters.name[ 0 ].value ? filters.name[ 0 ].value : undefined,
-      searchSingle2: filters.surnames && filters.surnames[ 0 ] && filters.surnames[ 0 ].value ? filters.surnames[ 0 ].value : undefined,
-      searchSingle3: filters.email && filters.email[ 0 ] && filters.email[ 0 ].value ? filters.email[ 0 ].value : undefined,
-      searchSingle4: filters.isActive && filters.isActive[ 0 ] && filters.isActive[ 0 ].value === true ? 'true'
-        : filters.isActive && filters.isActive[ 0 ] && filters.isActive[ 0 ].value === false ? 'false' : undefined,
+      queryParams: this.setQueryParams( filters ),
     } ).subscribe( res => {
 
       this.loading.loading$.next( false );
-      if ( !res || !res.data ) { return; }
+      if ( !res || !res.users ) { return; }
 
-      this.users = res.data as UserModel[];
+      this.users = res.users;
       this.formatElements();
       this.total = res.total || 0;
 
@@ -133,7 +159,6 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.selectedUsers = [];
       this.selectAll = false;
     }
-
 
   }
 

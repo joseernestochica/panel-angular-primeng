@@ -1,5 +1,8 @@
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { UserListRoutingModule } from './user-list-routing.module';
+
+import { AvatarModule } from 'primeng/avatar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DropdownModule } from 'primeng/dropdown';
@@ -10,10 +13,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { UserListRoutingModule } from './user-list-routing.module';
 
 import { UserListComponent } from './user-list.component';
-import { UserEditComponent } from '../user-edit/user-edit.component';
 
 
 @NgModule( {
@@ -21,18 +22,19 @@ import { UserEditComponent } from '../user-edit/user-edit.component';
     UserListComponent,
   ],
   imports: [
+    AvatarModule,
+    ButtonModule,
     CommonModule,
     ConfirmDialogModule,
-    DynamicDialogModule,
-    UserListRoutingModule,
-    TableModule,
-    PaginatorModule,
-    ButtonModule,
     DropdownModule,
+    DynamicDialogModule,
     InputTextModule,
     MultiSelectModule,
+    PaginatorModule,
     RippleModule,
-    ToggleButtonModule
+    TableModule,
+    ToggleButtonModule,
+    UserListRoutingModule,
   ]
 } )
 export class UserListModule { }

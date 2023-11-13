@@ -43,19 +43,18 @@ export class AuthService {
 
   login ( email: string, password: string ): Observable<UserModel | undefined> {
 
-    const data = { email, password };
-    const url = `${ this.urlApi }/auth/login`;
+    const body = { email, password };
+    const url = `${ this.urlApi }/login`;
 
-    return this.http.post<AuthResponse>( url, data ).pipe(
+    return this.http.post<AuthResponse>( url, body ).pipe(
       map( res => {
+        if ( !res || !res.user ) { return undefined; }
 
-        if ( !res || !res.data || !res.data.user ) { return undefined; }
-        const data = res.data;
-        const user = data.user;
+        const user = res.user;
 
         const auth = new AuthModel();
-        auth.accessToken = data.accessToken;
-        auth.refreshToken = data.refreshToken;
+        auth.token = res.token;
+        auth.refreshToken = res.refreshToken;
         auth.user = user;
 
         this.setAuthFromLocalStorage( auth );
@@ -77,8 +76,13 @@ export class AuthService {
     const auth = this.getAuthFromLocalStorage();
 
     if ( auth ) {
-      const url = `${ this.urlApi }/auth/refresh-user/${ auth.user?.id }`;
-      const sb = this.http.delete( url ).subscribe();
+      const url = `${ this.urlApi }/login/refresh_token`;
+      const sb = this.http.delete( url, {
+        headers: {
+          'r-token': auth.refreshToken || '',
+          'r-usuario': auth.user?.id?.toString() || ''
+        }
+      } ).subscribe();
       this.subscriptions.push( sb );
     }
 
@@ -92,15 +96,15 @@ export class AuthService {
   getUserByToken (): Observable<UserModel | undefined> {
 
     const auth = this.getAuthFromLocalStorage();
-    if ( !auth || !auth.accessToken ) {
+    if ( !auth || !auth.token ) {
       return of( undefined );
     }
 
-    const url = `${ this.urlApi }/auth/profile`;
+    const url = `${ this.urlApi }/user-token`;
     return this.http.get<AuthResponse>( url ).pipe(
 
       map( res => {
-        const user = res && res.data && res.data.user ? res.data.user : undefined;
+        const user = res && res.user ? res.user : undefined;
         if ( !user ) {
           this.logout;
           return undefined;
@@ -122,7 +126,7 @@ export class AuthService {
     const auth = this.getAuthFromLocalStorage();
     if ( !auth ) return of( false );
 
-    const url = `${ this.urlApi }/auth/check-token`;
+    const url = `${ this.urlApi }/login/check-token`;
 
     return this.http.get<AuthResponse>( url ).pipe(
       map( res => {
@@ -139,21 +143,21 @@ export class AuthService {
     const auth = this.getAuthFromLocalStorage();
     if ( !auth || !auth.user ) return of( undefined );
 
-    const url = `${ this.urlApi }/auth/refresh`;
+    const url = `${ this.urlApi }/login/renew`;
 
-    return this.http.post<AuthResponse>( url, {
-      refresh_token: auth.refreshToken,
-      user: auth.user.id,
-      ip: ''
+    return this.http.post<AuthResponse>( url, null, {
+      headers: {
+        'r-token': auth.refreshToken || '',
+        'r-user': auth.user.id?.toString() || ''
+      }
     } ).pipe(
       map( res => {
-        if ( !res || !res.data || !res.data.user ) { return undefined; }
-        const data = res.data;
-        const user = data.user;
+        if ( !res || !res.user ) { return undefined; }
+        const user = res.user;
 
         const newAuth = new AuthModel();
-        newAuth.accessToken = data.accessToken;
-        newAuth.refreshToken = data.refreshToken;
+        newAuth.token = res.token;
+        newAuth.refreshToken = res.refreshToken;
         newAuth.user = user;
 
         this.setAuthFromLocalStorage( newAuth );
@@ -179,7 +183,7 @@ export class AuthService {
 
   private setAuthFromLocalStorage ( auth: AuthModel ): boolean {
 
-    if ( auth && auth.accessToken ) {
+    if ( auth && auth.token ) {
       localStorage.setItem( this.authLocalStorageToken, JSON.stringify( auth ) );
       return true;
     }

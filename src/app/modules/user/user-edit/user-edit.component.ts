@@ -14,7 +14,6 @@ import { UserService } from '../services/user.service';
 
 import { ICountryModel, LocationModel } from 'shared/models';
 import { UserModel } from 'auth/models/user.model';
-import { ReponseErrorApi } from 'shared/interfaces/response.interface';
 
 @Component( {
   selector: 'app-user-edit',
@@ -103,20 +102,32 @@ export class UserEditComponent implements OnInit, OnDestroy {
       nif: [ this.user.nif, Validators.compose( [ Validators.required, Validators.minLength( 9 ) ] ) ],
       phone: [ this.user.phone, Validators.compose( [ Validators.required, Validators.minLength( 9 ) ] ) ],
       password: [ '' ],
-      birthDate: [ this.user.birthDate ? new Date( this.user.birthDate! ) : undefined ],
-      sex: [ this.user.sex || 'male' ],
-      isActive: [ this.user.isActive || true ],
+      active: [ this.user.active ],
       roles: [ this.user.roles, Validators.required ],
       address: [ this.user.address, Validators.compose( [ Validators.required, Validators.minLength( 9 ) ] ) ],
-      postalCode: [ this.user.postalCode, Validators.required ],
+      postal_code: [ this.user.postal_code, Validators.required ],
       country: [ this.user.country, Validators.required ],
       state: [ this.user.state, Validators.required ],
       city: [ this.user.city, Validators.required ],
 
     } );
 
+
+    // Desactivar el campo de contraseña si se está editando un usuario
+    // Solo activo para la edición de perfil e inserción
+    if ( !this.userIdRoute && this.userId ) { this.formGroup.controls[ 'password' ].disable(); }
+
+    // Desactar campos active y roles si se está editando el perfil
+    // Solo activos en la edición de usuario con role admin
+    if ( this.userIdRoute ) {
+      this.formGroup.controls[ 'active' ].disable();
+      this.formGroup.controls[ 'roles' ].disable();
+    }
+
     if ( !this.userId ) {
-      this.formGroup.controls[ 'password' ].setValidators( [ Validators.required, Validators.minLength( 6 ), Validators.maxLength( 20 ) ] );
+      this.formGroup.controls[ 'password' ].setValidators( [
+        Validators.required, Validators.minLength( 8 ),
+        Validators.pattern( '(?=\\D*\\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}' ) ] );
       this.formGroup.controls[ 'password' ].updateValueAndValidity();
     }
 
@@ -128,13 +139,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   }
 
-  private onErrorEmailExists ( error: ReponseErrorApi ) {
+  private onErrorEmailExists () {
 
     this.buttonService.buttonType$.next( 'error' );
-
-    if ( error.message === 'Email already exist' ) {
-      this.isErrorEmailDuplicate = true;
-    }
+    this.isErrorEmailDuplicate = true;
 
   }
 
@@ -142,15 +150,15 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
     const sb = this.userService.editOne( { id: this.userId, body: formValues } ).subscribe( res => {
 
-      if ( ( res as ReponseErrorApi ).error ) {
-        this.onErrorEmailExists( res as ReponseErrorApi );
+      if ( res && res.alert && res.alert === 'email_exists' ) {
+        this.onErrorEmailExists();
         return;
       }
 
       this.buttonService.buttonType$.next( 'save' );
 
-      if ( this.userIdRoute ) {
-        this.authService.currentUserValue = res as UserModel;
+      if ( this.userIdRoute ) { // Propagar los cambios en la edición de perfil
+        this.authService.currentUserValue = res?.user;
       }
 
     } );
@@ -160,13 +168,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   private saveCreate ( formValues: UserModel ) {
 
-    formValues.isLoginFacebook = false;
-    formValues.isLoginGoogle = false;
-
     const sb = this.userService.createOne( { body: formValues } ).subscribe( res => {
 
-      if ( ( res as ReponseErrorApi ).error ) {
-        this.onErrorEmailExists( res as ReponseErrorApi );
+      if ( res && res.alert && res.alert === 'email_exists' ) {
+        this.onErrorEmailExists();
         return;
       }
 

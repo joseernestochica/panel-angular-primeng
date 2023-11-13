@@ -3,14 +3,9 @@ export interface ResponseApi {
 	message?: string;
 	statusCode?: number;
 	total?: number;
-	page?: number;
-	last_page?: number;
-	error?: ReponseErrorApi;
+	errors?: any;
+	id?: number | string;
+	alert?: string;
+	ok?: boolean;
 
-}
-
-export interface ReponseErrorApi {
-	error?: string;
-	message?: string;
-	statusCode?: number;
 }
