@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { forkJoin, Subscription } from 'rxjs';
 
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { Table } from 'primeng/table';
+import { ConfirmationService } from 'primeng/api';
+import { Table, TableLazyLoadEvent } from 'primeng/table';
 
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ImageService } from 'shared/services/image.service';
@@ -24,7 +24,7 @@ import { UserModel } from 'auth/models/user.model';
 } )
 export class UserListComponent implements OnInit, OnDestroy {
 
-  private event: LazyLoadEvent | undefined;
+  private event: TableLazyLoadEvent | undefined;
   private subscriptions: Subscription[] = [];
 
   columns: TableColumnModel[] = [];
@@ -111,7 +111,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   }
 
-  loadUsers ( event: LazyLoadEvent | undefined ) {
+  loadUsers ( event: TableLazyLoadEvent | undefined ) {
 
     this.total = 0;
     this.users = [];
@@ -121,11 +121,11 @@ export class UserListComponent implements OnInit, OnDestroy {
     const filters: any = this.event?.filters || undefined;
 
     const sb = this.userService.getMany( {
-      limit: this.event?.rows,
+      limit: this.event?.rows || undefined,
       page: ( ( this.event?.first || 0 ) + ( this.event?.rows || 10 ) ) / ( this.event?.rows || 10 ),
-      sortc: this.event?.sortField,
+      sortc: typeof this.event?.sortField === 'string' ? this.event.sortField : undefined,
       sortd: this.event?.sortOrder === 1 ? 'ASC' : 'DESC',
-      search: this.event?.globalFilter && this.event.globalFilter !== '' ? this.event.globalFilter : '',
+      search: typeof this.event?.globalFilter === 'string' && this.event.globalFilter !== '' ? this.event.globalFilter : '',
       queryParams: this.setQueryParams( filters ),
     } ).subscribe( res => {
 

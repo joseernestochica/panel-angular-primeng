@@ -3,10 +3,10 @@
 $gutter: 1rem; //for primeflex grid system
 @import "assets/layout/styles/layout/layout.scss";
 
-/* PrimeNG */
-@import "../node_modules/primeng/resources/primeng.min.css";
+/* PrimeNG - Los estilos se manejan a través de los módulos individuales */
 @import "../node_modules/primeflex/primeflex.scss";
 @import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/primeng/resources/themes/lara-light-blue/theme.css";
 
 /* Demos */
 @import "assets/demo/styles/flags/flags.css";

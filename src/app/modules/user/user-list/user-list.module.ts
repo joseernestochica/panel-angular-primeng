@@ -1,10 +1,10 @@
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { UserListRoutingModule } from './user-list-routing.module';
 
 import { AvatarModule } from 'primeng/avatar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -16,7 +16,6 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 import { UserListComponent } from './user-list.component';
 
-
 @NgModule( {
   declarations: [
     UserListComponent,
@@ -27,7 +26,7 @@ import { UserListComponent } from './user-list.component';
     CommonModule,
     ConfirmDialogModule,
     DropdownModule,
-    DynamicDialogModule,
+    FormsModule,
     InputTextModule,
     MultiSelectModule,
     PaginatorModule,
