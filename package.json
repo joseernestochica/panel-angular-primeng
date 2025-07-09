@@ -23,9 +23,9 @@
     "chart.js": "^3.3.2",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
-    "primeng": "16",
+    "primeng": "17.18.15",
     "quill": "^1.3.7",
-    "rxjs": "~7.5.0",
+    "rxjs": "~7.8.2",
     "tslib": "^2.3.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.14.10"
