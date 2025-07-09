@@ -61,9 +61,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.formGroup = this.fb.group( {
             email: [
-                'joseernestochica@gmail.com', Validators.compose( [ Validators.required, Validators.email, Validators.minLength( 3 ), Validators.maxLength( 320 ), ] ), ],
+                'jose.chica@innovasur.com', Validators.compose( [ Validators.required, Validators.email, Validators.minLength( 3 ), Validators.maxLength( 320 ), ] ), ],
             password: [
-                '123456', Validators.compose( [ Validators.required, Validators.minLength( 3 ), Validators.maxLength( 100 ), ] ), ],
+                'jose.chica@innovasur.com!A1', Validators.compose( [ Validators.required, Validators.minLength( 3 ), Validators.maxLength( 100 ), ] ), ],
         } );
 
         this.formCheck.formGroup = this.formGroup;

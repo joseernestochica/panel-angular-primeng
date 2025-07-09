@@ -44,10 +44,11 @@ export class AuthService {
   login ( email: string, password: string ): Observable<UserModel | undefined> {
 
     const body = { email, password };
-    const url = `${ this.urlApi }/login`;
+    const url = `${ this.urlApi }/auth/login`;
 
     return this.http.post<AuthResponse>( url, body ).pipe(
       map( res => {
+        console.log( 'res', res );
         if ( !res || !res.user ) { return undefined; }
 
         const user = res.user;
