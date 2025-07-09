@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgModule } from '@angular/core';
@@ -24,8 +24,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { AppLoadingComponent } from './app.loading.component';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
-@NgModule( {
-    declarations: [
+@NgModule( { declarations: [
         AppFooterComponent,
         AppLayoutComponent,
         AppMenuComponent,
@@ -35,24 +34,18 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
         AppTopBarComponent,
         AppLoadingComponent,
     ],
-    imports: [
-        AppConfigModule,
+    exports: [AppLayoutComponent], imports: [AppConfigModule,
         AvatarModule,
         BadgeModule,
         BrowserAnimationsModule,
         BrowserModule,
         ButtonModule,
         FormsModule,
-        HttpClientModule,
         InputSwitchModule,
         InputTextModule,
         ProgressBarModule,
         RadioButtonModule,
         RippleModule,
         RouterModule,
-        SidebarModule,
-    ],
-    exports: [ AppLayoutComponent ],
-    providers: [ DynamicDialogConfig, DynamicDialogRef ]
-} )
+        SidebarModule], providers: [DynamicDialogConfig, DynamicDialogRef, provideHttpClient(withInterceptorsFromDi())] } )
 export class AppLayoutModule { }
