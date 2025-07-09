@@ -6,7 +6,7 @@ $gutter: 1rem; //for primeflex grid system
 /* PrimeNG - Los estilos se manejan a través de los módulos individuales */
 @import "../node_modules/primeflex/primeflex.scss";
 @import "../node_modules/primeicons/primeicons.css";
-@import "../node_modules/primeng/resources/themes/lara-light-blue/theme.css";
+/* En PrimeNG 18, los temas se importan desde los componentes individuales */
 
 /* Demos */
 @import "assets/demo/styles/flags/flags.css";
